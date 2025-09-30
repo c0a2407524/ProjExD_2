@@ -29,12 +29,12 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     return yoko, tate
 
 
-def gameover(screen: pg.Surface) -> None:  
+def gameover(screen: pg.Surface) -> None:    #演習1
     gg_img = pg.Surface((WIDTH, HEIGHT))
     gg_img.set_alpha(100)   #透明度の設定
     fonto = pg.font.Font(None, 80)
     txt = fonto.render("GameOver",   #文章の表示
-            True, (0,0,0))
+            True, (255,255,255))
     gg_img.blit(txt, [400, 325])
     ck_img = pg.image.load("fig/8.png")
     gg_img.blit(ck_img, [350,325])
@@ -42,7 +42,19 @@ def gameover(screen: pg.Surface) -> None:
     screen.blit(gg_img, [0, 0])
     pg.display.update()
     time.sleep(5)
-    
+
+
+def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
+    bb_imgs =[]
+    for r in range(1, 11):
+        bb_img = pg.Surface((20*r, 20*r))
+        pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
+        bb_img.set_colorkey((0, 0, 0))
+        bb_imgs.append(bb_img)
+    bb_accs = [a for a in range(1, 11)]
+
+    return bb_imgs, bb_accs
+
 
 
 
@@ -64,6 +76,7 @@ def main():
     bb_rct.centerx = random.randint(0, WIDTH)
     bb_rct.centery = random.randint(0, HEIGHT)
     vx, vy = +5, +5
+    bb_imgs, bb_accs = init_bb_imgs() 
 
 
 
@@ -89,14 +102,19 @@ def main():
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
-        bb_rct.move_ip(vx, vy)
+        avx = vx * bb_accs[min(tmr//500, 9)]
+        avy = vy * bb_accs[min(tmr//500, 9)]
+        bb_rct.move_ip(avx , avy)
         yoko, tate =check_bound(bb_rct)
         if not yoko:  #横方向にはみ出ていたら 
             vx *= -1
         if not tate:  #縦方向にはみ出ていたら
             vy *= -1
         screen.blit(bb_img, bb_rct)  #爆弾描画
-        
+
+
+        bb_img = bb_imgs[min(tmr//500, 9)]
+
         pg.display.update()
         tmr += 1
         clock.tick(50)
