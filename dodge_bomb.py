@@ -1,6 +1,7 @@
 import os
 import sys
 import pygame as pg
+import random
 
 
 WIDTH, HEIGHT = 1100, 650
@@ -20,7 +21,15 @@ def main():
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 300, 200
+    bb_img = pg.Surface((20, 20))
+    pg.draw.circle(bb_img, (255, 0, 0), (10, 10), 10)
+    bb_img.set_colorkey((0, 0, 0))
     clock = pg.time.Clock()
+    bb_rct = bb_img.get_rect() #爆弾rect
+    bb_rct.centerx = random.randint(0, WIDTH)
+    bb_rct.centery = random.randint(0, HEIGHT)
+    vx, vy = +5, +5
+
     tmr = 0
     while True:
         for event in pg.event.get():
@@ -34,9 +43,11 @@ def main():
             if key_lst[key]:
                 sum_mv[0] += mv[0]
                 sum_mv[1] += mv[1]
-
+        
         kk_rct.move_ip(sum_mv)
         screen.blit(kk_img, kk_rct)
+        screen.blit(bb_img, bb_rct)  #爆弾描画
+        bb_rct.move_ip(vx, vy)
         pg.display.update()
         tmr += 1
         clock.tick(50)
