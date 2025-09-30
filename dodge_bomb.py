@@ -30,6 +30,11 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
 
 
 def gameover(screen: pg.Surface) -> None:    #演習1
+    """
+    引数:screen(pg.display.set_mode((WIDTH, HEIGHT)))
+    戻り値:なし
+    爆弾とこうかとんが衝突したら動作する関数
+    """
     gg_img = pg.Surface((WIDTH, HEIGHT))
     gg_img.set_alpha(100)   #透明度の設定
     fonto = pg.font.Font(None, 80)
@@ -46,6 +51,11 @@ def gameover(screen: pg.Surface) -> None:    #演習1
 
 def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:   #演習2
     bb_imgs =[]
+    """
+    引数:なし
+    戻り値:画像の大きさと加速度のリスト
+    画像の大きさと爆弾の加速度のリストを作成する関数
+    """
     for r in range(1, 11):   #画像の大きさのリスト
         bb_img = pg.Surface((20*r, 20*r))
         pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
@@ -57,6 +67,11 @@ def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:   #演習2
 
 
 def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:   #演習3の途中
+    """
+    引数:なし
+    戻り値:移動量タプルと対応する画像Surfaceの辞書
+    移動量タプルと対応する画像Surfaceの辞書を返す関数
+    """
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9)
 
     kk_dict = {
@@ -64,11 +79,6 @@ def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:   #演習3の途中
         (+5, 0): rotozoom(0, 1.0),
         (+5,-5): rotozoom(-45, 1.0),
     }
-
-
-
-
-
 
 
 def main():
@@ -87,7 +97,6 @@ def main():
     bb_rct.centery = random.randint(0, HEIGHT)
     vx, vy = +5, +5
     bb_imgs, bb_accs = init_bb_imgs() 
-
 
 
     tmr = 0
@@ -121,8 +130,6 @@ def main():
         if not tate:  #縦方向にはみ出ていたら
             vy *= -1
         screen.blit(bb_img, bb_rct)  #爆弾描画
-
-
         bb_img = bb_imgs[min(tmr//500, 9)]   #爆弾の拡大率の変更
 
         pg.display.update()
