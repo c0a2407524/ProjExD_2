@@ -56,6 +56,16 @@ def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:   #演習2
     return bb_imgs, bb_accs
 
 
+def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:   #演習3の途中
+    kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9)
+
+    kk_dict = {
+        ( 0, 0): rotozoom(0, 1.0),
+        (+5, 0): rotozoom(0, 1.0),
+        (+5,-5): rotozoom(-45, 1.0),
+    }
+
+
 
 
 
@@ -96,13 +106,12 @@ def main():
             if key_lst[key]:
                 sum_mv[0] += mv[0]
                 sum_mv[1] += mv[1]
-
         
         kk_rct.move_ip(sum_mv)
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
-        
+
         avx = vx * bb_accs[min(tmr//500, 9)]   #横方向の加速度の実装
         avy = vy * bb_accs[min(tmr//500, 9)]   #縦方向の加速度の実装
         bb_rct.move_ip(avx , avy)   #vx,vyをavx,avyに変更
