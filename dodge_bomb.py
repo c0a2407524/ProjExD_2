@@ -44,14 +44,14 @@ def gameover(screen: pg.Surface) -> None:    #演習1
     time.sleep(5)
 
 
-def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
+def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:   #演習2
     bb_imgs =[]
-    for r in range(1, 11):
+    for r in range(1, 11):   #画像の大きさのリスト
         bb_img = pg.Surface((20*r, 20*r))
         pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
         bb_img.set_colorkey((0, 0, 0))
         bb_imgs.append(bb_img)
-    bb_accs = [a for a in range(1, 11)]
+    bb_accs = [a for a in range(1, 11)]    #加速度のリスト
 
     return bb_imgs, bb_accs
 
@@ -102,9 +102,10 @@ def main():
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
-        avx = vx * bb_accs[min(tmr//500, 9)]
-        avy = vy * bb_accs[min(tmr//500, 9)]
-        bb_rct.move_ip(avx , avy)
+        
+        avx = vx * bb_accs[min(tmr//500, 9)]   #横方向の加速度の実装
+        avy = vy * bb_accs[min(tmr//500, 9)]   #縦方向の加速度の実装
+        bb_rct.move_ip(avx , avy)   #vx,vyをavx,avyに変更
         yoko, tate =check_bound(bb_rct)
         if not yoko:  #横方向にはみ出ていたら 
             vx *= -1
@@ -113,7 +114,7 @@ def main():
         screen.blit(bb_img, bb_rct)  #爆弾描画
 
 
-        bb_img = bb_imgs[min(tmr//500, 9)]
+        bb_img = bb_imgs[min(tmr//500, 9)]   #爆弾の拡大率の変更
 
         pg.display.update()
         tmr += 1
